@@ -1,7 +1,7 @@
-﻿using Catalog.Dtos;
+﻿using Catalog.Api.Dtos;
 using System;
 
-namespace Catalog.Entities
+namespace Catalog.Api.Entities
 {
     public record Item
     {

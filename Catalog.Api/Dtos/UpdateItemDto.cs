@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.Dtos
+namespace Catalog.Api.Dtos
 {
-    public record CreateItemDto
+    public record UpdateItemDto
     {
         [Required]
         public string Name { get; init; }
 
         [Required]
-        [Range(1,100)]
+        [Range(1, 100)]
         public decimal Price { get; init; }
     }
 }
