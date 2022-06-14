@@ -1,0 +1,15 @@
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db mongo
+
+//para usar autenticación en mongo:
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=password mongo
+
+//para usar autenticación en mongo y unirse a una docker network:
+docker run -d --rm --name mongo -p 27017:27017 -v mongodbdata:/data/db -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=password --network=net5tutorial mongo
+
+//para crear una imagen usando un dockerfile (en la misma carpeta que la carpeta en la que ejecutamos el cli) 
+docker build -t catalog:v1 .
+
+//ejecutar la imagen de la web api con acceso a mongodb 
+//1. el contendor sobrescribe el puerto de escucha para la web api y lo configura con el puerto 80 en lugar del 5000/5001 de lauchSettings.json
+//2. es necesario sobrescribir las variables de configuración de la API para la BD (en el contenedor ya no tenemos "localhost" con la BD sino un contenedor separado para la BD)
+docker run -it --rm -p 8080:80 -e MongoDbSettings:Host=mongo -e MongoDbSettings:Password=password --network=net5tutorial catalog:v1

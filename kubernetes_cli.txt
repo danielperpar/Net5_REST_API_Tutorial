@@ -1,0 +1,24 @@
+//para tener un template inicial en VS 2022
+kubectl create deployment catalog-deploymet --image=dperezparaiso/catalog:v1 --dry-run=client -o yaml > catalog.yaml
+
+kubectl create secret generic catalog-secrets --from-literal=mongodb-password='password'
+
+//crear un pod deployment o un service deployment (dentro de la carpeta en la que tengamos el yaml)
+kubectl apply -f .\catalog.yaml
+
+//ver pods creados (todos)
+kubectl get pods
+kubectl get pods -w  ---> watch pods
+
+//ver pod deployments creados
+kubectl get deployments
+
+//ver pod statefulset creados
+kubectl get statefulsets
+
+//ver logs (usando el identificador del pod generado que devuelve kubectl get pods)
+kubectl logs catalog-deploymet-b4d766bd4-4b5ks
+
+kubectl delete pod catalog-deploymet-b4d766bd4-4b5ks
+
+kubectl scale deployments/catalog-deployment --replicas=3
