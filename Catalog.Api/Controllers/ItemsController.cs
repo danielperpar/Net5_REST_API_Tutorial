@@ -46,7 +46,7 @@ namespace Catalog.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(item.AsDto());
+            return item.AsDto();
         }
 
         // POST /items
