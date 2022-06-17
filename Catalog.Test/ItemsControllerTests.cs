@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -53,7 +54,7 @@ namespace Catalog.Api.Test
         }
 
         [Fact]
-        public async Task GetItemsAsync_WithExistingItems_ReturnsExpectedItem()
+        public async Task GetItemsAsync_WithExistingItems_ReturnsAllItems()
         {
             //Arrange
             var expectedItems = new[] { CreateRandomItem(), CreateRandomItem(), CreateRandomItem() };
@@ -68,6 +69,33 @@ namespace Catalog.Api.Test
 
             //Assert
             actualItems.Should().BeEquivalentTo(expectedItems);
+
+        }
+
+        [Fact]
+        public async Task GetItemsAsync_WithMatchingItems_ReturnsMatchingItems()
+        {
+            //Arrange
+            var allItems = new[] 
+            { 
+                new Item(){Name = "Potion"},
+                new Item(){Name = "Antidote"},
+                new Item(){Name = "Hi-Potion"}
+            };
+
+            var nameToMatch = "Potion";
+
+            repositoryStub.Setup(repo => repo.GetItemsAsync())
+                .ReturnsAsync(allItems);
+
+            var controller = new ItemsController(repositoryStub.Object, loggerStub.Object);
+
+            //Act
+            IEnumerable<ItemDto> foundItems = await controller.GetItemsAsync(nameToMatch);
+
+            //Assert
+            foundItems.Should().OnlyContain(
+                item => item.Name == allItems[0].Name || item.Name == allItems[2].Name);
 
         }
 
